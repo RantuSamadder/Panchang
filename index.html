@@ -181,12 +181,45 @@
     </div>
 
     <div class="scrolling-wrapper">
-        <div class="scrolling-text">
-            হরে কৃষ্ণ হরে কৃষ্ণ কৃষ্ণ কৃষ্ণ হরে হরে হরে রাম হরে রাম রাম রাম হরে হরে &nbsp;&nbsp; | &nbsp;&nbsp; 
+    <div class="scrolling-text">
+        <span>
             হরে কৃষ্ণ হরে কৃষ্ণ কৃষ্ণ কৃষ্ণ হরে হরে হরে রাম হরে রাম রাম রাম হরে হরে &nbsp;&nbsp; | &nbsp;&nbsp;
-            হরে কৃষ্ণ হরে কৃষ্ণ কৃষ্ণ কৃষ্ণ হরে হরে হরে রাম হরে রাম রাম রাম হরে হরে
-        </div>
+            হরে কৃষ্ণ হরে কৃষ্ণ কৃষ্ণ কৃষ্ণ হরে হরে হরে রাম হরে রাম রাম রাম হরে হরে &nbsp;&nbsp; | &nbsp;&nbsp;
+        </span>
+        <!-- duplicate for seamless loop -->
+        <span>
+            হরে কৃষ্ণ হরে কৃষ্ণ কৃষ্ণ কৃষ্ণ হরে হরে হরে রাম হরে রাম রাম রাম হরে হরে &nbsp;&nbsp; | &nbsp;&nbsp;
+            হরে কৃষ্ণ হরে কৃষ্ণ কৃষ্ণ কৃষ্ণ হরে হরে হরে রাম হরে রাম রাম রাম হরে হরে &nbsp;&nbsp; | &nbsp;&nbsp;
+        </span>
     </div>
+</div>
+
+<style>
+.scrolling-wrapper {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    background: #fef3e0; /* light background */
+    border: 1px solid #ccc;
+}
+
+.scrolling-text {
+    display: inline-flex;
+    animation: scroll 20s linear infinite;
+}
+
+.scrolling-text span {
+    display: inline-block;
+    padding-right: 50px; /* spacing between repeats */
+}
+
+/* keyframes for smooth scrolling */
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+</style>
+
 
     <div class="content">
         <div class="input-group">
@@ -263,7 +296,7 @@
 </div>
 
 <footer>
-    Souteast University Puja Celebration Committee<br>
+    Southeast University Puja Celebration Committee<br>
     © 2026 All rights reserved.
 </footer>
 
