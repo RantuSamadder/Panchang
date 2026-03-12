@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panchang - পঞ্জিকা</title>
+    
+    <link rel="icon" href="asset/logo.png" type="image/png">
+
+    <style>
+        @font-face {
+            font-family: 'Kalpurush';
+            src: local('Kalpurush');
+        }
+
+        :root {
+            --saffron: #ff9933;
+            --dark-blue: #1a2a6c;
+            --gold: #f1c40f;
+            --light-saffron: #fff5e6;
+        }
+
+        body {
+            font-family: "Times New Roman", "Kalpurush", serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 10px;
+            color: #333;
+        }
+
+        .card {
+            max-width: 650px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border-top: 10px solid var(--saffron);
+        }
+
+        /* হেডার ডিজাইন পরিবর্তন */
+        .header {
+            background: var(--dark-blue);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.5); /* চিকন বর্ডার */
+            object-fit: cover;
+        }
+
+        .header-text {
+            text-align: left;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .header p {
+            margin: 2px 0 0;
+            font-size: 18px;
+            color: var(--gold);
+        }
+
+        /* ইনফিনিটি স্ক্রলিং টেক্সট (News Ticker) */
+        .scrolling-wrapper {
+            background: var(--light-saffron);
+            border-bottom: 2px solid var(--saffron);
+            overflow: hidden;
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .scrolling-text {
+            display: inline-block;
+            white-space: nowrap;
+            font-size: 16px;
+            font-weight: bold;
+            color: #d35400;
+            animation: scroll-left 20s linear infinite;
+        }
+
+        @keyframes scroll-left {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        /* স্মার্ট ইনপুট ইন্টারফেস */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: #fdf2e9;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #fad7a0;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+            color: #555;
+        }
+
+        input[type="datetime-local"] {
+            padding: 12px;
+            border: 2px solid var(--saffron);
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+            background: white;
+        }
+
+        button {
+            background: var(--saffron);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3);
+        }
+
+        button:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(230, 126, 34, 0.4);
+        }
+
+        /* বাকি গ্রিড স্টাইল আগের মতোই */
+        .result-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .p-item {
+            padding: 15px; background: #fffdf5; border: 1px solid #fde68a;
+            border-radius: 12px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .label { font-weight: bold; color: #555; }
+        .eng { font-weight: bold; color: var(--dark-blue); font-size: 17px; display: block; }
+        .ben { color: #d35400; font-size: 16px; display: block; }
+        .time-range { font-size: 12px; color: #27ae60; background: #eafaf1; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 6px; font-weight: bold; }
+        
+        .sun-box {
+            display: flex; justify-content: space-around; background: #fff9e6;
+            padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px dashed var(--saffron);
+        }
+
+        footer {
+            text-align: center; margin-top: 30px; font-size: 14px; color: #777; padding-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <div class="header">
+        <img src="asset/logo.png" alt="Logo">
+        <div class="header-text">
+            <h1>সাউথইস্ট বিশ্ববিদ্যালয় পূজা উদযাপন কমিটি</h1>
+            <p>বৈদিক পঞ্জিকা</p>
+        </div>
+    </div>
+
+    <div class="scrolling-wrapper">
+        <div class="scrolling-text">
+            হরে কৃষ্ণ হরে কৃষ্ণ কৃষ্ণ কৃষ্ণ হরে হরে হরে রাম হরে রাম রাম রাম হরে হরে &nbsp;&nbsp; | &nbsp;&nbsp; 
+            হরে কৃষ্ণ হরে কৃষ্ণ কৃষ্ণ কৃষ্ণ হরে হরে হরে রাম হরে রাম রাম রাম হরে হরে &nbsp;&nbsp; | &nbsp;&nbsp;
+            হরে কৃষ্ণ হরে কৃষ্ণ কৃষ্ণ কৃষ্ণ হরে হরে হরে রাম হরে রাম রাম রাম হরে হরে
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="input-group">
+            <label>তারিখ এবং সময় নির্বাচন করুন:</label>
+            <input type="datetime-local" id="dtInput">
+            <button onclick="runPanchang()">গণনা করুন</button>
+        </div>
+
+        <div id="display" class="result-grid" style="display:none">
+            
+            <div class="sun-box">
+                <div style="text-align:center">
+                    <span style="font-size:12px; color:#666">সূর্যোদয় (Sunrise)</span><br>
+                    <b id="sunrise-val" style="color:#e67e22">--:--</b>
+                </div>
+                <div style="text-align:center">
+                    <span style="font-size:12px; color:#666">সূর্যাস্ত (Sunset)</span><br>
+                    <b id="sunset-val" style="color:#2c3e50">--:--</b>
+                </div>
+            </div>
+
+            <div class="p-item" style="background: #eef2ff; border-color: #c7d2fe;">
+                <div class="label">বঙ্গাব্দ তারিখ</div>
+                <div style="text-align:right">
+                    <span id="b-date" class="eng" style="color:#4338ca"></span>
+                </div>
+            </div>
+
+            <div class="p-item">
+                <div class="label">বার (Weekday)</div>
+                <div>
+                    <span id="v-en" class="eng"></span>
+                    <span id="v-bn" class="ben"></span>
+                </div>
+            </div>
+
+            <div class="p-item">
+                <div class="label">তিথি (Tithi)</div>
+                <div>
+                    <span id="t-en" class="eng"></span>
+                    <span id="t-bn" class="ben"></span>
+                    <span id="t-time" class="time-range"></span>
+                </div>
+            </div>
+
+            <div class="p-item">
+                <div class="label">নক্ষত্র (Nakshatra)</div>
+                <div>
+                    <span id="n-en" class="eng"></span>
+                    <span id="n-bn" class="ben"></span>
+                    <span id="n-time" class="time-range"></span>
+                </div>
+            </div>
+
+            <div class="p-item">
+                <div class="label">যোগ (Yoga)</div>
+                <div>
+                    <span id="y-en" class="eng"></span>
+                    <span id="y-bn" class="ben"></span>
+                    <span id="y-time" class="time-range"></span>
+                </div>
+            </div>
+
+            <div class="p-item">
+                <div class="label">করণ (Karana)</div>
+                <div>
+                    <span id="k-en" class="eng"></span>
+                    <span id="k-bn" class="ben"></span>
+                    <span id="k-time" class="time-range"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    South East University Puja Celebration Committee<br>
+    © 2026 All rights reserved.
+</footer>
+
+<script>
+// (আপনার আগের জাভাস্ক্রিপ্ট কোডটি এখানে হুবহু থাকবে, কোনো পরিবর্তন প্রয়োজন নেই)
+const DATA={
+    Tithi:[
+        ["Prathama","প্রথমা"],["Dwitiya","দ্বিতীয়া"],["Tritiya","তৃতীয়া"],
+        ["Chaturthi","চতুর্থী"],["Panchami","পঞ্চমী"],["Shasti","ষষ্ঠী"],
+        ["Saptami","সপ্তমী"],["Ashtami","অষ্টমী"],["Navami","নবমী"],
+        ["Dashami","দশমী"],["Ekadashi","একাদশী"],["Dwadashi","দ্বাদশী"],
+        ["Trayodashi","ত্রয়োদশী"],["Chaturdashi","চতুর্দশী"],["Purnima","পূর্ণিমা"],
+        ["Prathama","প্রথমা"],["Dwitiya","দ্বিতীয়া"],["Tritiya","তৃতীয়া"],
+        ["Chaturthi","চতুর্থী"],["Panchami","পঞ্চমী"],["Shasti","ষষ্ঠী"],
+        ["Saptami","সপ্তমী"],["Ashtami","অষ্টমী"],["Navami","নবমী"],
+        ["Dashami","দশমী"],["Ekadashi","একাদশী"],["Dwadashi","দ্বাদশী"],
+        ["Trayodashi","ত্রয়োদশী"],["Chaturdashi","চতুর্দশী"],["Amavasya","অমাবস্যা"]
+    ],
+    Nak:[
+        ["Ashwini","অশ্বিনী"],["Bharani","ভরণী"],["Krittika","কৃত্তিকা"],
+        ["Rohini","রোহিণী"],["Mrigashira","মৃগশিরা"],["Ardra","আদ্রা"],
+        ["Punarvasu","পুনর্বসু"],["Pushya","পুষ্যা"],["Ashlesha","অশ্লেষা"],
+        ["Magha","মঘা"],["Purva Phalguni","পূর্ব ফালগুনী"],["Uttara Phalguni","উত্তর ফালগুনী"],
+        ["Hasta","হস্তা"],["Chitra","চিত্রা"],["Swati","স্বাতী"],
+        ["Vishakha","বিশাখা"],["Anuradha","অনুরাধা"],["Jyeshtha","জ্যেষ্ঠা"],
+        ["Mula","মূল"],["Purva Ashadha","পূর্বাষাঢ়া"],["Uttara Ashadha","উত্তরাষাঢ়া"],
+        ["Shravana","শ্রবণা"],["Dhanishta","ধনিষ্ঠা"],["Shatabhisha","শতভিষা"],
+        ["Purva Bhadrapada","পূর্ব ভাদ্রপদ"],["Uttara Bhadrapada","উত্তর ভাদ্রপদ"],["Revati","রেবতী"]
+    ],
+    Yoga:[
+        ["Vishkumbha","বিষ্কুম্ভ"],["Preeti","প্রীতি"],["Ayushman","আয়ুষ্মান"],
+        ["Saubhagya","সৌভাগ্য"],["Shobhana","শোভন"],["Atiganda","অতিগণ্ড"],
+        ["Sukarma","সুকর্মা"],["Dhriti","ধৃতি"],["Shoola","শূল"],
+        ["Ganda","গণ্ড"],["Vriddhi","বৃদ্ধি"],["Dhruva","ধ্রুব"],
+        ["Vyaghata","ব্যাঘাত"],["Harshana","হর্ষণ"],["Vajra","বজ্র"],
+        ["Siddhi","সিদ্ধি"],["Vyatipata","ব্যতিপাত"],["Variyan","বরীয়ান"],
+        ["Parigha","পরিঘ"],["Shiva","শিব"],["Siddha","সিদ্ধ"],
+        ["Sadhya","সাধ্য"],["Shubha","শুভ"],["Shukla","শুক্ল"],
+        ["Brahma","ব্রহ্ম"],["Indra","ইন্দ্র"],["Vaidhriti","বৈধৃতি"]
+    ],
+    Karana:[
+        ["Bava","বব"],["Balava","বালব"],["Kaulava","কৌলব"],["Taitila","তৈতিল"],
+        ["Gara","গর"],["Vanija","বণিজ"],["Vishti","বিষ্টি"],["Shakuni","শকুনি"],
+        ["Chatushpada","চতুষ্পদ"],["Naga","নাগ"],["Kimstughna","কিংস্তুঘ্ন"]
+    ],
+    Vara:[
+        ["Sunday","রবিবার"],["Monday","সোমবার"],["Tuesday","মঙ্গলবার"],
+        ["Wednesday","বুধবার"],["Thursday","বৃহস্পতিবার"],["Friday","শুক্রবার"],
+        ["Saturday","শনিবার"]
+    ],
+    MonthsBn: ["বৈশাখ", "জ্যৈষ্ঠ", "আষাঢ়", "শ্রাবণ", "ভাদ্র", "আশ্বিন", "কার্তিক", "অগ্রহায়ণ", "পৌষ", "মাঘ", "ফাল্গুন", "চৈত্র"]
+};
+
+function getPositions(date){
+    const jd=(date.getTime()/86400000)+2440587.5;
+    const d=jd-2451545.0;
+    let Ls=(280.460+0.9856474*d)%360;
+    let g=(357.528+0.9856003*d)%360;
+    let sun=(Ls+1.915*Math.sin(g*Math.PI/180))%360;
+    let Lm=(218.316+13.176396*d)%360;
+    let M=(134.963+13.064993*d)%360;
+    let moon=(Lm+6.289*Math.sin(M*Math.PI/180))%360;
+    const ayanamsa=23.85;
+    let sunN=(sun-ayanamsa+360)%360;
+    let moonN=(moon-ayanamsa+360)%360;
+    return{ sun:sunN, moon:moonN, diff:(moonN-sunN+360)%360 };
+}
+
+function getValue(date, type){
+    const p=getPositions(date);
+    if(type==="tithi") return Math.floor(p.diff/12);
+    if(type==="nak") return Math.floor(p.moon/(360/27));
+    if(type==="yoga") return Math.floor(((p.sun+p.moon)%360)/(360/27));
+    if(type==="karana") return Math.floor(p.diff/6);
+}
+
+function getKaranaData(diff) {
+    let kIdx = Math.floor(diff / 6);
+    let kar;
+    if (kIdx === 0) kar = DATA.Karana[10]; 
+    else if (kIdx >= 57) kar = DATA.Karana[kIdx - 50]; 
+    else kar = DATA.Karana[(kIdx - 1) % 7]; 
+    return kar;
+}
+
+function getBengaliDate(date) {
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let bDay, bMonthIdx, bYear;
+    bYear = (month < 4 || (month === 4 && day < 14)) ? year - 594 : year - 593;
+    const monthDays = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 30]; 
+    if ((year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0)) monthDays[10] = 31;
+    let refDate = new Date(year, 3, 14); 
+    let diffTime = date.getTime() - refDate.getTime();
+    let diffDays = Math.floor(diffTime / (1000 * 3600 * 24));
+    if (diffDays < 0) {
+        let prevYear = year - 1;
+        let prevRef = new Date(prevYear, 3, 14);
+        diffDays = Math.floor((date.getTime() - prevRef.getTime()) / (1000 * 3600 * 24));
+    }
+    let remaining = diffDays;
+    bMonthIdx = 0;
+    while (remaining >= monthDays[bMonthIdx]) {
+        remaining -= monthDays[bMonthIdx];
+        bMonthIdx++;
+    }
+    bDay = remaining + 1;
+    const bnNums = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    const toBn = (n) => String(n).split('').map(d => bnNums[d] || d).join('');
+    return `${toBn(bDay)} ${DATA.MonthsBn[bMonthIdx]}, ${toBn(bYear)} বঙ্গাব্দ`;
+}
+
+function calcSun(date, isSunset) {
+    let lat = 23.81, lng = 90.41;
+    let dayOfYear = Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 86400000);
+    let phi = lat * Math.PI / 180;
+    let decl = 0.409 * Math.sin(2 * Math.PI * (dayOfYear - 81) / 365);
+    let hourAngle = Math.acos(-Math.tan(phi) * Math.tan(decl));
+    let frac = hourAngle / (2 * Math.PI);
+    let time = isSunset ? 12 + frac * 24 : 12 - frac * 24;
+    let finalTime = new Date(date.getTime());
+    finalTime.setHours(Math.floor(time), (time % 1) * 60);
+    return finalTime.toLocaleTimeString('bn-BD', {hour:'2-digit', minute:'2-digit'});
+}
+
+function findEnd(date, type){
+    const startVal=getValue(date,type);
+    let t1=new Date(date.getTime());
+    let t2=new Date(date.getTime());
+    for(let i=0;i<144;i++){
+        t2.setMinutes(t2.getMinutes()+10);
+        if(getValue(t2,type)!==startVal) break;
+        t1=new Date(t2.getTime());
+    }
+    while((t2-t1)>1000){
+        let mid=new Date((t1.getTime()+t2.getTime())/2);
+        if(getValue(mid,type)===startVal) t1=mid;
+        else t2=mid;
+    }
+    return t2.toLocaleTimeString('bn-BD',{hour:'2-digit', minute:'2-digit'});
+}
+
+function runPanchang(){
+    const input=document.getElementById("dtInput").value;
+    if(!input) return;
+    const date=new Date(input);
+    const pos=getPositions(date);
+    document.getElementById("sunrise-val").innerText = calcSun(date, false);
+    document.getElementById("sunset-val").innerText = calcSun(date, true);
+    document.getElementById("b-date").innerText = getBengaliDate(date);
+    document.getElementById("v-en").innerText=DATA.Vara[date.getDay()][0];
+    document.getElementById("v-bn").innerText=DATA.Vara[date.getDay()][1];
+    let tIdx=Math.floor(pos.diff/12);
+    let pakshaEn=tIdx<15?"Shukla Paksha - ":"Krishna Paksha - ";
+    let pakshaBn=tIdx<15?"শুক্ল পক্ষ - ":"কৃষ্ণ পক্ষ - ";
+    document.getElementById("t-en").innerText=pakshaEn+DATA.Tithi[tIdx][0];
+    document.getElementById("t-bn").innerText=pakshaBn+DATA.Tithi[tIdx][1];
+    document.getElementById("t-time").innerText="সময়সীমা: "+findEnd(date,"tithi")+" পর্যন্ত";
+    let nIdx=Math.floor(pos.moon/(360/27));
+    document.getElementById("n-en").innerText=DATA.Nak[nIdx][0];
+    document.getElementById("n-bn").innerText=DATA.Nak[nIdx][1];
+    document.getElementById("n-time").innerText="সময়সীমা: "+findEnd(date,"nak")+" পর্যন্ত";
+    let yIdx=Math.floor(((pos.sun+pos.moon)%360)/(360/27));
+    document.getElementById("y-en").innerText=DATA.Yoga[yIdx][0];
+    document.getElementById("y-bn").innerText=DATA.Yoga[yIdx][1];
+    document.getElementById("y-time").innerText="সময়সীমা: "+findEnd(date,"yoga")+" পর্যন্ত";
+    let kar = getKaranaData(pos.diff);
+    document.getElementById("k-en").innerText=kar[0];
+    document.getElementById("k-bn").innerText=kar[1];
+    document.getElementById("k-time").innerText="সময়সীমা: "+findEnd(date,"karana")+" পর্যন্ত";
+    document.getElementById("display").style.display="grid";
+}
+
+window.onload=()=>{
+    let now=new Date();
+    now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
+    document.getElementById("dtInput").value=now.toISOString().slice(0,16);
+}
+</script>
+
+</body>
+</html>
