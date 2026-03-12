@@ -65,7 +65,7 @@ Panchang/
 
 ## 📜 Example Screenshot
 
-<img src="asset/screenshot.png" alt="Screenshot" width="200">
+<img src="asset/screenshot" alt="Screenshot" width="200">
 
 ---
 
