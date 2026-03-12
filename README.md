@@ -1,6 +1,6 @@
 # Panchang - বৈদিক পঞ্জিকা
 
-![Panchang Logo](asset/logo.png)
+<img src="asset/logo.png" alt="Panchang Logo" width="100">
 
 **Panchang** is a modern web-based Vedic calendar tool designed for Bengali users. It provides daily astrological and calendrical information including **Tithi, Nakshatra, Yoga, Karana, Bengali date, Sunrise, Sunset**, and more, with an intuitive interface.
 
@@ -10,7 +10,7 @@ This project is perfect for students, devotees, and anyone interested in followi
 
 ## 🔗 Live Demo
 
-You can view the live version here: [Panchang Live](https://github.com/RantuSamadder/Panchang)
+You can view the live version here: [Panchang Live](https://rantusamadder.github.io/Panchang/)
 
 ---
 
@@ -65,7 +65,7 @@ Panchang/
 
 ## 📜 Example Screenshot
 
-![Screenshot](asset/logo.png) *(replace with real app screenshot if available)*
+<img src="asset/logo.png" alt="Screenshot" width="200"> *(replace with real app screenshot if available)*
 
 ---
 
